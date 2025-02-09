@@ -11,27 +11,26 @@ class SnakeGame:
         pygame.display.set_caption("Jogo da Cobrinha")
         self.clock = pygame.time.Clock()
 
-        # Cores
+        # Colors
         self.black = (0, 0, 0)
         self.white = (255, 255, 255)
         self.red = (200, 0, 0)
         self.green = (0, 200, 0)
-        self.blue = (0, 0, 200)
 
-        # Estado do jogo
+        # Game state
         self.snake = [[self.width // 2, self.height // 2]]
         self.food = self.generate_food()
         self.direction = "RIGHT"
         self.running = True
 
     def generate_food(self):
-        """Gera comida em uma posição aleatória."""
+        # Generate food in a random position
         x = random.randint(0, (self.width // self.block_size) - 1) * self.block_size
         y = random.randint(0, (self.height // self.block_size) - 1) * self.block_size
         return [x, y]
 
     def move_snake(self):
-        """Move a cobra na direção atual."""
+        # Move the snake
         head = self.snake[0][:]
         if self.direction == "UP":
             head[1] -= self.block_size
@@ -42,24 +41,23 @@ class SnakeGame:
         elif self.direction == "RIGHT":
             head[0] += self.block_size
 
-        # Colisão com a parede
+        # Handle colision with walls
         if head[0] < 0 or head[0] >= self.width or head[1] < 0 or head[1] >= self.height:
             self.running = False
 
-        # Colisão com si mesma
+        # Handle colision with the snake itself
         if head in self.snake:
             self.running = False
 
         self.snake.insert(0, head)
 
-        # Comer a comida
+        # Generate food
         if head == self.food:
             self.food = self.generate_food()
         else:
             self.snake.pop()
 
     def render(self):
-        """Renderiza a tela do jogo."""
         self.screen.fill(self.black)
         for segment in self.snake:
             pygame.draw.rect(self.screen, self.green, (*segment, self.block_size, self.block_size))
@@ -68,7 +66,6 @@ class SnakeGame:
         pygame.display.update()
 
     def run(self):
-        """Loop principal do jogo."""
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -85,7 +82,7 @@ class SnakeGame:
 
             self.move_snake()
             self.render()
-            self.clock.tick(10)  # Controla a velocidade do jogo
+            self.clock.tick(10)  # Control speed
 
         pygame.quit()
 
